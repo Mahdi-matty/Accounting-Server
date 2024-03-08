@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS Accounting_db;
+CREATE DATABASE Accounting_db;
