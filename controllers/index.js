@@ -18,9 +18,23 @@ router.use('/api/items', itemRoutes)
 const employeeRoutes = require('./employeeRoutes')
 router.use('/api/epmloyees', employeeRoutes)
 
+const loadRoutes= require('./loanRoutes')
+router.use('/api/loan', loadRoutes)
+
+const monthExpRoutes = require('./monthExpenseRoutes')
+router.use('/api/monthexpens', monthExpRoutes)
+const oneTimeExpense = require('./oneTimeRoutes')
+router.use('/api/onetime', oneTimeExpense)
+
+const expenseRoutes = require('./expense')
+router.use('/api/expense', expenseRoutes)
+
+const balanceRoutes = require('./balanceRoutes')
+router.use('/api/balance', balanceRoutes)
 
 
-router.get('/tokenDataClient', (req,res)=>{
+
+router.get('/tokenData', (req,res)=>{
     console.log('Headers:', req.headers);
     const token = req?.headers?.authorization?.split(" ")[1];
     console.log(token)
