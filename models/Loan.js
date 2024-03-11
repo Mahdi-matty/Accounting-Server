@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 class Loan extends Model {
   get monthPayment(){
-    
+    return (this.amount/this.duration)+(this.interest*(this.amount/this.duration))
   }
  }
 
@@ -12,9 +12,8 @@ Loan.init({
       type: DataTypes.STRING,
       allowNull: false,
     },
-    content: {
-      type: DataTypes.STRING,
-      allowNull: true
+    duration: {
+      type: DataTypes.INTEGER,
     },
     amount: {
       type: DataTypes.INTEGER,
