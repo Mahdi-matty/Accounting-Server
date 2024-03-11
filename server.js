@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const sequelize = require('./config/connection');
 const bodyParser = require('body-parser');
-const allRoutes = require('./controllers/');
+const allRoutes = require('./controllers');
 const PORT = process.env.PORT || 3001;
 const app = express();
 require('dotenv').config();
