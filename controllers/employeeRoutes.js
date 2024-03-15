@@ -9,7 +9,13 @@ const { Op } = require('sequelize');
 
 
 router.get('/', (req,res)=>{
-    Employee.findAll().then(allEmployee=>{
+    Employee.findAll({
+        attributes: {
+            include: [
+                [Sequlize.literal('hours * payPerHour'), 'monthPay']
+            ]
+        }
+    }).then(allEmployee=>{
        res.json(allEmployee)
     }).catch((err)=>{
        res.status(500).json({msg: 'internal server error', err})
@@ -21,6 +27,7 @@ router.post('/', withTokenAuth,(req,res)=>{
            username: req.body.username,
            hours: req.body.hours,
            payPerHour: req.body.payPerHour,
+           UserId: req.body.userId
        }).then((newEmploy)=>{
            res.json(newEmploy)
        }).catch((err)=>{
@@ -29,7 +36,13 @@ router.post('/', withTokenAuth,(req,res)=>{
    });
    
 router.get('/:id', (req, res)=>{
-       Employee.findByPk(req.params.id).then((findItem)=>{
+       Employee.findByPk(req.params.id, {
+        attributes: {
+            include: [
+                [Sequlize.literal('hours * payPerHour'), 'monthPay']
+            ]
+        }
+       }).then((findItem)=>{
            if(!findItem){
                res.status(404).json('expense not found')
            }else{
@@ -45,6 +58,11 @@ router.get('/user/:userId', (req, res)=>{
     Employee.findAll({
         where: {
             userId: userId,
+        },
+        attributes: {
+            include: [
+                [Sequlize.literal('hours * payPerHour'), 'monthPay']
+            ]
         }
     }).then((findItem)=>{
         if(!findItem){

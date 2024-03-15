@@ -9,7 +9,13 @@ const { Op } = require('sequelize');
 
 
 router.get('/', (req,res)=>{
-    Loan.findAll().then(allItem=>{
+    Loan.findAll({
+        attributes: {
+            include: [
+                [Sequlize.literal('(amount / duration) + (interest * (amount / duration))'), 'monthPayment']
+            ]
+        }
+    }).then(allItem=>{
        res.json(allItem)
     }).catch((err)=>{
        res.status(500).json({msg: 'internal server error', err})
@@ -21,7 +27,8 @@ router.post('/', withTokenAuth,(req,res)=>{
            title: req.body.title,
            amount: req.body.amount,
            interest: req.body.interest,
-           duration: req.body.duration
+           duration: req.body.duration,
+           UserId: req.body.userId
        }).then((newItem)=>{
            res.json(newItem)
        }).catch((err)=>{
@@ -30,7 +37,13 @@ router.post('/', withTokenAuth,(req,res)=>{
    });
    
 router.get('/:id', (req, res)=>{
-       Loan.findByPk(req.params.id).then((findItem)=>{
+       Loan.findByPk(req.params.id, {
+        attributes: {
+            include: [
+                [Sequlize.literal('(amount / duration) + (interest * (amount / duration))'), 'monthPayment']
+            ]
+        }
+       }).then((findItem)=>{
            if(!findItem){
                res.status(404).json('loan not found')
            }else{
@@ -46,6 +59,11 @@ router.get('/:id', (req, res)=>{
     Loan.findAll({
         where: {
             userId: userId,
+        },
+        attributes: {
+            include: [
+                [Sequlize.literal('(amount / duration) + (interest * (amount / duration))'), 'monthPayment']
+            ]
         }
     }).then((findItem)=>{
         if(!findItem){

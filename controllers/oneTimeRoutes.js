@@ -21,6 +21,7 @@ router.post('/', withTokenAuth,(req,res)=>{
            title: req.body.title,
            amount: req.body.amount,
            content: req.body.content,
+           UserId: req.body.userId
        }).then((newItem)=>{
            res.json(newItem)
        }).catch((err)=>{
