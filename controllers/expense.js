@@ -22,6 +22,7 @@ router.post('/', withTokenAuth,(req,res)=>{
            month: req.body.month,
            amount: req.body.amount,
            detail: req.body.detail,
+           UserId: req.body.userId
        }).then((newItem)=>{
            res.json(newItem)
        }).catch((err)=>{
@@ -77,15 +78,17 @@ router.delete('/:id', withTokenAuth, (req, res)=>{
     })
 })
 
-router.get('/month/:monthId', async (req, res)=>{
-    const monthId = req.params.monthId
+router.get('/month/:monthId/user/:userId', async (req, res)=>{
+    const userId = req.params.userId;
+    const monthId = req.params.monthId;
     try {
         const [year, month] = monthId.split('-');
         const firstDayOfMonth = new Date(year, month - 1, 1);
         const lastDayOfMonth = new Date(year, month, 0);
 
-        const expenses = await Expense.findAll({
+        const expenses = await userExpenses.findAll({
             where: {
+                userId: userId,
                 date: {
                     [Op.between]: [firstDayOfMonth, lastDayOfMonth]
                 }

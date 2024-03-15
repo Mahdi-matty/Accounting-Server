@@ -21,6 +21,7 @@ router.post('/', withTokenAuth,(req,res)=>{
        Balance.create({
            expenses: req.body.expenses,
            income: req.body.income,
+           UserId: req.body.userId
        }).then((newItem)=>{
            res.json(newItem)
        }).catch((err)=>{

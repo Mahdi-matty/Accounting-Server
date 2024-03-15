@@ -16,13 +16,14 @@ const itemRoutes = require('./itemRoutes')
 router.use('/api/items', itemRoutes)
 
 const employeeRoutes = require('./employeeRoutes')
-router.use('/api/epmloyees', employeeRoutes)
+router.use('/api/employees', employeeRoutes)
 
 const loadRoutes= require('./loanRoutes')
 router.use('/api/loan', loadRoutes)
 
 const monthExpRoutes = require('./monthExpenseRoutes')
 router.use('/api/monthexpens', monthExpRoutes)
+
 const oneTimeExpense = require('./oneTimeRoutes')
 router.use('/api/onetime', oneTimeExpense)
 

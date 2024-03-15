@@ -9,7 +9,13 @@ const { Op } = require('sequelize');
 
 
 router.get('/', (req,res)=>{
-    Product.findAll().then(allproduct=>{
+    Product.findAll({
+        attributes: {
+            include: [
+                [Sequlize.literal('size * price'), 'total']
+            ]
+        }
+    }).then(allproduct=>{
        res.json(allproduct)
     }).catch((err)=>{
        res.status(500).json({msg: 'internal server error', err})
@@ -21,6 +27,7 @@ router.post('/', withTokenAuth,(req,res)=>{
            title: req.body.title,
            size: req.body.size,
            price: req.body.price,
+           UserId: req.body.userId
        }).then((newProduct)=>{
            res.json(newProduct)
        }).catch((err)=>{
@@ -29,7 +36,13 @@ router.post('/', withTokenAuth,(req,res)=>{
    });
    
 router.get('/:id', (req, res)=>{
-       Product.findByPk(req.params.id).then((findproduct)=>{
+       Product.findByPk(req.params.id, {
+        attributes: {
+            include: [
+                [Sequlize.literal('size * price'), 'total']
+            ]
+        }
+       }).then((findproduct)=>{
            if(!findproduct){
                res.status(404).json('product not found')
            }else{
@@ -45,6 +58,11 @@ router.get('/user/:userId', withTokenAuth, (req, res)=>{
     Product.findAll({
         where: {
             userId: userId,
+        },
+        attributes: {
+            include: [
+                [Sequlize.literal('size * price'), 'total']
+            ]
         }
     }).then((findItem)=>{
         if(!findItem){
