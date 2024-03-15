@@ -40,6 +40,23 @@ router.get('/:id', (req, res)=>{
        })
    });
 
+router.get('/user/:userId', (req, res)=>{
+    const userId = req.params.userId
+    Employee.findAll({
+        where: {
+            userId: userId,
+        }
+    }).then((findItem)=>{
+        if(!findItem){
+            res.status(404).json('Employee not found')
+        }else{
+            res.json(findItem)
+        }
+    }).catch((err)=>{
+        res.status(500).json({msg: 'internal server error', err})
+    })
+});
+
    router.put('/:id', withTokenAuth, (req,res)=>{
     Employee.update({
         username: req.body.username,

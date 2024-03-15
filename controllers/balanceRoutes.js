@@ -75,7 +75,8 @@ router.delete('/:id', withTokenAuth, (req, res)=>{
     })
 })
 
-router.get('/month/:monthId', async (req, res)=>{
+router.get('/month/:monthId/user/:userId', async (req, res)=>{
+    const userId = req.params.userId;
    const monthId = req.params.monthId
     try {
         const [year, month] = monthId.split('-');
@@ -84,6 +85,7 @@ router.get('/month/:monthId', async (req, res)=>{
 
         const balances = await Balance.findAll({
             where: {
+                userId: userId,
                 date: {
                     [Op.between]: [firstDayOfMonth, lastDayOfMonth]
                 }
