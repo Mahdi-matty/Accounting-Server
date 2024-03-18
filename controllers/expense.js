@@ -86,10 +86,10 @@ router.get('/month/:monthId/user/:userId', async (req, res)=>{
         const firstDayOfMonth = new Date(year, month - 1, 1);
         const lastDayOfMonth = new Date(year, month, 0);
 
-        const expenses = await userExpenses.findAll({
+        const expenses = await Expense.findAll({
             where: {
                 userId: userId,
-                date: {
+                createdAt: {
                     [Op.between]: [firstDayOfMonth, lastDayOfMonth]
                 }
             }

@@ -75,6 +75,34 @@ router.get('/user/:userId', withTokenAuth, (req, res)=>{
     })
 });
 
+router.get('/user/:userId/month/:monthId', withTokenAuth, async(req, res)=>{
+    const userId = req.params.userId
+    const monthId = req.params.monthId
+    try {
+        const [year, month] = monthId.split('-');
+        const firstDayOfMonth = new Date(year, month - 1, 1);
+        const lastDayOfMonth = new Date(year, month, 0);
+
+        const incomes = await Product.findAll({
+            where: {
+                userId: userId,
+                createdAt: {
+                    [Op.between]: [firstDayOfMonth, lastDayOfMonth]
+                }
+            }, attributes: {
+                include: [
+                    [Sequlize.literal('size * price'), 'total']
+                ]
+            }
+        });
+
+        res.json(incomes);
+    } catch (error) {
+        console.error('Error fetching expenses:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
    router.put('/:id', withTokenAuth, (req,res)=>{
     Product.update({
         title: req.body.title,

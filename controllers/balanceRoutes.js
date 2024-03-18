@@ -87,9 +87,13 @@ router.get('/month/:monthId/user/:userId', async (req, res)=>{
         const balances = await Balance.findAll({
             where: {
                 userId: userId,
-                date: {
+                createdAt: {
                     [Op.between]: [firstDayOfMonth, lastDayOfMonth]
                 }
+            }, attributes: {
+                include: [
+                    [Sequlize.literal('income - expenses'), 'net']
+                ]
             }
         });
 
